@@ -92,15 +92,12 @@ def selectProperPiece(setup, sources, pieceId, target):
         # verify whether this delta is an allowed move for the piece:
         if len(pieceId) == 1:   #pawn
             if pawnIsInitialPosition(pieceId[0], source) and isCollision(setup, target) == FALSE:
-                print(1)
                 if (deltaRow == 2 or deltaRow == 1) and deltaCol == 0:
                     lstAllowed.append(source)
             elif isCollision(setup, target) == FALSE and deltaCol == 0:
-                print(2)
                 if deltaRow == 1:
                     lstAllowed.append(source)
             else:
-                print(3)
                 if deltaRow == 1 and abs(deltaCol) == 1:
                     lstAllowed.append(source)
         elif pieceId[1] == "K":
@@ -112,7 +109,7 @@ def selectProperPiece(setup, sources, pieceId, target):
                 (deltaRow != 0 and deltaCol == 0) or \
                 (abs(deltaCol) == abs(deltaRow) and deltaRow != 0):
                 lstAllowed.append(source)
-            # TODO: only if no collision on the way to target
+            # TODO: only if no collision on the way to target --> iterative "path planning" would make sense
         elif pieceId[1] == "B":
             if abs(deltaCol) == abs(deltaRow) and deltaRow != 0:
                 lstAllowed.append(source)
