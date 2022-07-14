@@ -1,5 +1,6 @@
 from curses.ascii import isupper
 from pickle import FALSE, TRUE
+from re import X
 
 
 def pieceIdToChar(figure):
@@ -86,16 +87,20 @@ def selectProperPiece(setup, sources, pieceId, target):
     for source in sources:
         # calculate delta to target position:
         deltaCol = calcDeltaCol(source, target)
+        print(source + ": " + str(deltaCol))
         deltaRow = calcDeltaRow(source, target, pieceId[0])
         # verify whether this delta is an allowed move for the piece:
         if len(pieceId) == 1:   #pawn
-            if pawnIsInitialPosition(pieceId[0], source) and not isCollision(setup, target):
-                if deltaRow == 2 or deltaRow == 1:
+            if pawnIsInitialPosition(pieceId[0], source) and isCollision(setup, target) == FALSE:
+                print(1)
+                if (deltaRow == 2 or deltaRow == 1) and deltaCol == 0:
                     lstAllowed.append(source)
-            elif not isCollision(setup, target):
+            elif isCollision(setup, target) == FALSE and deltaCol == 0:
+                print(2)
                 if deltaRow == 1:
                     lstAllowed.append(source)
             else:
+                print(3)
                 if deltaRow == 1 and abs(deltaCol) == 1:
                     lstAllowed.append(source)
         elif pieceId[1] == "K":
@@ -140,7 +145,7 @@ def calcDeltaRow(src, tar, player):
     return deltaRow
 
 def pawnIsInitialPosition(player, position):
-    if (player == "w" and int(position[1]) == 2) or (player == "b" and int(position[0]) == 7):
+    if (player == "w" and int(position[1]) == 2) or (player == "b" and int(position[1]) == 7):
         return TRUE
     else: 
         return FALSE
