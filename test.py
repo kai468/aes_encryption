@@ -83,6 +83,7 @@ def addPiece(setup, fieldId, pieceId):
     return setup
 
 def selectProperPiece(setup, sources, pieceId, target):
+    # TODO: a legal must also consider that the own king is not left in a check 
     lstAllowed = []
     for source in sources:
         # calculate delta to target position:
@@ -129,6 +130,23 @@ def selectProperPiece(setup, sources, pieceId, target):
     else:
         return lstAllowed[0]
 
+def isCheck(setup):
+    # TODO!
+    # only passing the setup as a variable does not cover all use cases: 
+    #   if this function should be used to check whether a king move is legal,
+    #   the target field should be checked for checks (temporarily "removing" or
+    #   ignoring the king's current position within the setup)
+    # https://www.chessprogramming.org/Attack_and_Defend_Maps
+    # https://www.chessprogramming.org/Checks_and_Pinned_Pieces_(Bitboards)
+    # localize king(s)
+    return "w" # valid return values: "w", "b", "" TODO tbd: is "wb" a usecase?
+
+# TODO: recognize checkmate (if check -> check all options for the checked king)
+# TODO: this last one has another 'special' rule: king can only capture if he's not in check afterwards
+
+#TODO: showLegalMoves(setup, piece, [position])?
+
+
 def calcDeltaCol(src, tar):
     # per definition: moves are incrementing from A to H (for white AND black)
     return ord(tar[0]) - ord(src[0])
@@ -150,10 +168,13 @@ def pawnIsInitialPosition(player, position):
 def isCollision(setup, target):
     # TODO: collisions are also (probably) in the way!
     # pawns: "im Vorbeigehen!"
+    # TODO: check if it's a enemy's piece or the player's 
     if checkFieldOccupation(setup, target) != "":
         return TRUE
     else:
         return FALSE
+
+
 
 def debugPrintBoard(setup):
     NOT_WARN = '\033[93m'
@@ -195,7 +216,7 @@ bRunning = TRUE
 
 while bRunning:
     debugPrintBoard(setup)
-    print("Bitte Zug eingeben (x = stop): ")
+    print("Next move (x = stop): ")
     move = input()
     if move == "x":
         bRunning = FALSE
